@@ -1,3 +1,6 @@
+/* -----------------------------------------
+	Clock divider: Divides clock by 2
+*/ -----------------------------------------
 module clk_gen (
 
 	reset_n,
@@ -6,11 +9,17 @@ module clk_gen (
 
 );
 
+	/* -----------------------------------------
+		Inputs / Outputs
+	*/ -----------------------------------------
 	input reset_n;
 	input clk_50;
 	
 	output reg clk_25;
 	
+	/* -----------------------------------------
+		Behavioural
+	*/ -----------------------------------------
 	always @ (posedge clk_50) begin
 		if (!reset_n) 
 			clk_25 <= 1'b0;
