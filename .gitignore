@@ -6,5 +6,6 @@ simulation
 *.bak
 *.vwf
 *.qsf
+*.qpf
 *.qws
 *nativelink*
