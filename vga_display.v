@@ -22,7 +22,7 @@ module vga_display (
 	/* -----------------------------------------
 		Internal wires
 	----------------------------------------- */ 
-	wire frame = (h_count >= (16 + 48 + 96 + 10) && h_count <= (800 - 10)) && (v_count >= (10 + 2 + 29 + 10) && v_count <= (521 - 10));
+	// wire frame = (h_count >= (16 + 48 + 96 + 10) && h_count <= (800 - 10)) && (v_count >= (10 + 2 + 29 + 10) && v_count <= (521 - 10));
 	
 	/* -----------------------------------------
 		Paramters
@@ -34,12 +34,12 @@ module vga_display (
 	/* -----------------------------------------
 		Generate a white picture with a red frame on a black background
 	----------------------------------------- */ 
-	assign rgb = ~bright ? BLACK : frame ? RED : WHITE;
+	// assign rgb = ~bright ? BLACK : frame ? RED : WHITE;
 	
 	/* -----------------------------------------
 		Comments
 	----------------------------------------- */ 
-	/* reg[2:0] rgb_r;
+	reg[2:0] rgb_r;
 	
 	always @ *	
 		if (~bright) rgb_r <= BLACK; // draw black if not in the bright zone
@@ -47,5 +47,6 @@ module vga_display (
 			rgb_r <= RED;
 		else // draw white rectangle
 			rgb_r <= WHITE;
-	*/	
+			
+	assign rgb = rgb_r;
 endmodule
