@@ -1,6 +1,6 @@
 /* -----------------------------------------
 	VGA control unit
-*/ -----------------------------------------
+----------------------------------------- */ 
 module vga_control (
 
 	reset_n,
@@ -15,7 +15,7 @@ module vga_control (
 
 	/* -----------------------------------------
 		Inputs / Outputs
-	*/ -----------------------------------------
+	----------------------------------------- */ 
 	input reset_n;
 	input clk_25;
 	
@@ -27,7 +27,7 @@ module vga_control (
 	
 	/* -----------------------------------------
 		Behavioural
-	*/ -----------------------------------------
+	----------------------------------------- */ 
 	always @ (posedge clk_25) begin	
 		if (!reset_n) begin
 			h_sync <= 1'b1;
@@ -41,7 +41,7 @@ module vga_control (
 		
 			/* -----------------------------------------
 				Horisontal syncronization
-			*/ -----------------------------------------
+			----------------------------------------- */ 
 			if (h_count < 16) // 16 clocks of back porch
 				h_sync <= 1'b1;
 			else if (h_count < (16 + 96)) // 96 clocks of h_sync active low
@@ -59,7 +59,7 @@ module vga_control (
 				
 			/* -----------------------------------------
 				Vertical syncronization
-			*/ -----------------------------------------
+			----------------------------------------- */ 
 			if (v_count < 10) // 10 lines of back porch
 				v_sync <= 1'b1;
 			else if (v_sync < (10 + 2)) // 2 lines of v_sync pulse active low
