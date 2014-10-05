@@ -6,6 +6,7 @@ module vga_display (
 	h_count,
 	v_count,
 	bright,
+	data,
 	rgb
 
 );
@@ -15,6 +16,7 @@ module vga_display (
 	----------------------------------------- */ 
 	input [9:0] h_count;
 	input [9:0] v_count;
+	input [2:0] data;
 	input bright;
 	
 	output [2:0] rgb;
@@ -22,7 +24,7 @@ module vga_display (
 	/* -----------------------------------------
 		Internal wires
 	----------------------------------------- */ 
-	wire frame = (h_count >= (16 + 48 + 96 + 10) && h_count <= (800 - 10)) && (v_count >= (10 + 2 + 29 + 10) && v_count <= (521 - 10));
+	// wire frame = (h_count >= (16 + 48 + 96 + 10) && h_count <= (800 - 10)) && (v_count >= (10 + 2 + 29 + 10) && v_count <= (521 - 10));
 	
 	/* -----------------------------------------
 		Paramters
@@ -34,7 +36,12 @@ module vga_display (
 	/* -----------------------------------------
 		Generate a white picture with a red frame on a black background
 	----------------------------------------- */ 
-	assign rgb = ~bright ? BLACK : frame ? RED : WHITE;
+	// assign rgb = ~bright ? BLACK : frame ? WHITE : RED;
+	
+	/* -----------------------------------------
+		Generate a image from camera
+	----------------------------------------- */ 
+	assign rgb = ~bright ? BLACK : data;
 	
 	/* -----------------------------------------
 		Comments

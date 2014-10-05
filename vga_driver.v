@@ -3,12 +3,18 @@
 ----------------------------------------- */ 
 module vga_driver (
 
+	reset,
 	reset_n,
 	clk_50,
+	xclk,
+	pclk,
+	data_in,
 	rgb,
 	hs,
 	vs,
-	led_out
+	h_ref,
+	v_sync
+	// led_out
 
 );
 
@@ -17,11 +23,19 @@ module vga_driver (
 	----------------------------------------- */ 
 	input reset_n;
 	input clk_50;
+	
+	input pclk;
+	input [7:0] data_in;
+	input h_ref;
+	input v_sync;
 	output [2:0] rgb;
 	output hs;
 	output vs;
+	output reset;
+	output xclk;
 	
-	output led_out;
+	
+	// output led_out;
 	
 	/* -----------------------------------------
 		Internal wires
@@ -30,6 +44,14 @@ module vga_driver (
 	wire [9:0] h_count;
 	wire [9:0] v_count;
 	wire bright;
+	wire [2:0] data_out;
+	
+	wire write;
+	wire read;
+	wire in_pos;
+	wire out_pos;
+	wire pixel_in;
+	wire pixel_out;
 	
 	/* -----------------------------------------
 		Internal registers
@@ -67,18 +89,49 @@ module vga_driver (
 		.h_count(h_count),
 		.v_count(v_count),
 		.bright(bright),
+		.data(data_out),
 		.rgb(rgb)
 	
 	);
 	
-	// Led blinker
+	vga_camera camera (
+	
+		.reset(reset),
+		.reset_n(reset_n),
+		.clk_25(clk_25),
+		.xclk(xclk),
+		.pclk(pclk),
+		.write(write),
+		.in_pos(in_pos),
+		.
+		.data_in(data_in),
+		.data_out(data_out),
+		.h_ref(h_ref),
+		.v_sync(v_sync)
+	
+	);
+	
+	vga_table mem (
+	
+	.reset_n(reset_n),
+	.clk_50(clk_50),
+	.write(write),
+	.read(read),
+	.in_pos(in_pos),
+	.out_pos(),
+	.pixel_in(pixel_in),
+	.pixel_out(pixel_out)
+
+);
+	
+	/* Led blinker
 	led_blinker blinker (
 	
 		.reset_n(reset_n),
 		.clk_25(clk_25),
 		.led_out(led_out)
 	
-	);
+	);*/
 	
 	/* -----------------------------------------
 		Initial procedure
