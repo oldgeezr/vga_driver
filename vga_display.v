@@ -6,7 +6,7 @@ module vga_display (
 	h_count,
 	v_count,
 	bright,
-	rgb,
+	rgb
 
 );
 	
@@ -39,13 +39,16 @@ module vga_display (
 	/* -----------------------------------------
 		Comments
 	----------------------------------------- */ 
-	/* reg[2:0] rgb_r;
+	// reg[2:0] rgb_r = RED;
 	
+	/*
 	always @ *	
 		if (~bright) rgb_r <= BLACK; // draw black if not in the bright zone
 		else if ((h_count >= (16 + 48 + 96 + 10) && h_count <= (800 - 10)) && (v_count >= (10 + 2 + 29 + 10) && v_count <= (521 - 10))) // draw 10 px red frame
 			rgb_r <= RED;
 		else // draw white rectangle
 			rgb_r <= WHITE;
-	*/	
+			
+	*/
+	// assign rgb = rgb_r;
 endmodule

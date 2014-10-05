@@ -7,7 +7,8 @@ module vga_driver (
 	clk_50,
 	rgb,
 	hs,
-	vs
+	vs,
+	led_out
 
 );
 
@@ -20,10 +21,19 @@ module vga_driver (
 	output hs;
 	output vs;
 	
+	output led_out;
+	
 	/* -----------------------------------------
 		Internal wires
-	----------------------------------------- */ 
+	----------------------------------------- */
 	wire clk_25;
+	wire [9:0] h_count;
+	wire [9:0] v_count;
+	wire bright;
+	
+	/* -----------------------------------------
+		Internal registers
+	----------------------------------------- */ 
 	
 	/* -----------------------------------------
 		Components
@@ -57,8 +67,20 @@ module vga_driver (
 		.h_count(h_count),
 		.v_count(v_count),
 		.bright(bright),
-		.rgb(rgb),
+		.rgb(rgb)
 	
 	);
 	
+	// Led blinker
+	led_blinker blinker (
+	
+		.reset_n(reset_n),
+		.clk_25(clk_25),
+		.led_out(led_out)
+	
+	);
+	
+	/* -----------------------------------------
+		Initial procedure
+	----------------------------------------- */ 
 endmodule
