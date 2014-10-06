@@ -40,18 +40,22 @@ module vga_driver (
 	/* -----------------------------------------
 		Internal wires
 	----------------------------------------- */
+	// Clock wires
 	wire clk_25;
+	
+	// Image wires
 	wire [9:0] h_count;
 	wire [9:0] v_count;
 	wire bright;
 	wire [2:0] data_out;
 	
+	// VGA Control wires
+	
+	// VGA Camera wires
 	wire write;
 	wire read;
-	wire in_pos;
-	wire out_pos;
-	wire pixel_in;
-	wire pixel_out;
+	wire [2:0] pixel_in;
+	wire [2:0] pixel_out;
 	
 	/* -----------------------------------------
 		Internal registers
@@ -86,14 +90,17 @@ module vga_driver (
 	// Image generator
 	vga_display image (
 	
+		.clk_25(clk_25),
 		.h_count(h_count),
 		.v_count(v_count),
 		.bright(bright),
-		.data(data_out),
+		.read(read),
+		.data(pixel_out),
 		.rgb(rgb)
 	
 	);
 	
+	/* VGA Camera 
 	vga_camera camera (
 	
 		.reset(reset),
@@ -102,8 +109,6 @@ module vga_driver (
 		.xclk(xclk),
 		.pclk(pclk),
 		.write(write),
-		.in_pos(in_pos),
-		.
 		.data_in(data_in),
 		.data_out(data_out),
 		.h_ref(h_ref),
@@ -111,18 +116,17 @@ module vga_driver (
 	
 	);
 	
+	// Frame buffer
 	vga_table mem (
-	
-	.reset_n(reset_n),
-	.clk_50(clk_50),
-	.write(write),
-	.read(read),
-	.in_pos(in_pos),
-	.out_pos(),
-	.pixel_in(pixel_in),
-	.pixel_out(pixel_out)
+		
+		.reset_n(reset_n),
+		.clk_50(clk_50),
+		.write(write),
+		.read(read),
+		.pixel_in(data_out),
+		.pixel_out(pixel_out)
 
-);
+	);
 	
 	/* Led blinker
 	led_blinker blinker (
@@ -132,8 +136,4 @@ module vga_driver (
 		.led_out(led_out)
 	
 	);*/
-	
-	/* -----------------------------------------
-		Initial procedure
-	----------------------------------------- */ 
 endmodule

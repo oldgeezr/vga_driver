@@ -16,12 +16,15 @@ module vga_display (
 	/* -----------------------------------------
 		Inputs / Outputs
 	----------------------------------------- */ 
+	input clk_25;
 	input [9:0] h_count;
 	input [9:0] v_count;
 	input [2:0] data;
 	input bright;
 	
-	output reg [2:0] rgb;
+	output reg read;
+	output [2:0] rgb;
+	reg [18:0] mem[0:(300000)];
 	
 	/* -----------------------------------------
 		Internal wires
@@ -43,13 +46,14 @@ module vga_display (
 	/* -----------------------------------------
 		Generate a image from camera
 	----------------------------------------- */ 
-	// assign rgb = ~bright ? BLACK : data;
+	assign rgb = ~bright ? BLACK : data;
 
 	always @ (posedge clk_25) begin
 		if (bright)
-			rgb <= data;
+			read <= 1;
+		else 
+			read <= 0;
 	end
-		
 	
 	/* -----------------------------------------
 		Comments

@@ -1,3 +1,6 @@
+/* -----------------------------------------
+	VGA Camera 0.3 Mp
+----------------------------------------- */ 
 module vga_camera (
 
 	reset,
@@ -8,12 +11,14 @@ module vga_camera (
 	data_in,
 	data_out,
 	write,
-	in_pos,
 	h_ref,
 	v_sync
 	
 );
 
+	/* -----------------------------------------
+		Inputs/Outputs
+	----------------------------------------- */ 
 	input reset_n;
 	input clk_25;
 	input pclk;
@@ -24,17 +29,17 @@ module vga_camera (
 	output reset;
 	output xclk;
 	output reg write;
-	output reg in_pos;
 	output reg [2:0] data_out;
 	
 	assign reset = reset_n;
 	assign xclk = clk_25;
 	
-	reg [9:0] r_pix;
-	reg [8:0] c_pix;
 	reg [2:0] byte_nr;
-	
+	reg start;
 	reg increment;
+	reg [7:0] Y;
+	reg [7:0] Cb;
+	reg [7:0] Cr;
 	
 	/* -----------------------------------------
 		Paramters
@@ -45,68 +50,48 @@ module vga_camera (
 	parameter GREEN = 3'b010;
 	parameter BLUE = 3'b001;
 	
-	integer Y;
-	integer Cb;
-	integer Cr;
-	
-	integer R;
-	integer G;
-	integer B;
-	
-	always @ (negedge h_ref or posedge pclk or negedge reset_n) begin
-		if (!reset_n) begin
-			r_pix <= 0;
-			c_pix <= 0;
-		end else if (!h_ref) begin
-			r_pix <= 0;
-			c_pix <= c_pix + 1;
-		end else if (pclk && h_ref) begin
-			r_pix <= r_pix + 1;
-			if (c_pix == 480)
-				c_pix <= 0;
-		end else begin
-			if (c_pix == 480)
-				c_pix <= 0;
-		end
+	always @ (h_ref) begin
+		if (h_ref)
+			start <= 1;
+		else
+			start <= 0;
 	end
 	
 	always @ (posedge pclk or negedge reset_n) begin
 		if (!reset_n) begin
+			// Reset registers
 			increment <= 0;
 			data_out <= 0;
 			byte_nr <= 0;
-			in_pos <= 0;
 			write <= 0;
-		end else if (h_ref == 1) begin
-		
-			write <= 0;
-		
+		end else if (start == 1) begin
 			if (byte_nr == 0) begin
 				Cb <= data_in; // Cb
 				increment <= increment + 1;
+				byte_nr <= byte_nr + 1;
 			end else if (byte_nr == 1) begin
 				Y <= data_in; // Y
-				if (increment)
+				if (increment) begin
 					increment <= increment + 1;
-				else begin
-					increment <= increment - 1;	
-					R <= (Y + (Cr - 128));
-					G <= (Y - 2*(Cb - 128) - 3*(Cr - 128));
-					B <= (Y + 2*(Cb - 128));
-					data_out <= (R > G && R > B) ? RED : (G > R && G > B) ? GREEN : BLUE;
+					byte_nr <= byte_nr + 1;
+				end else begin
+					increment <= increment - 1;
+					byte_nr <= byte_nr - 1;	
 					write <= 1;
-					in_pos <= (c_pix + 1)*r_pix;
+					data_out <= BLUE; // Y < 128 ? BLACK : WHITE;
 				end
 			end else if (byte_nr == 2) begin
 				Cr <= data_in; // Cr
 				increment <= increment - 1;
-				R <= (Y + (Cr - 128));
-				G <= (Y - 2*(Cb - 128) - 3*(Cr - 128));
-				B <= (Y + 2*(Cb - 128));
-				data_out <= (R > G && R > B) ? RED : (G > R && G > B) ? GREEN : BLUE;
 				write <= 1;
-				in_pos <= (c_pix + 1)*r_pix;
+				data_out <= GREEN; // Y < 128 ? BLACK : WHITE;
 			end
-		end 
+		end else begin
+			// Reset registers
+			increment <= 0;
+			data_out <= 0;
+			byte_nr <= 0;
+			write <= 0;
+		end	
 	end
 endmodule
