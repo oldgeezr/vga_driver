@@ -41,6 +41,7 @@ module vga_display (
 	/* -----------------------------------------
 		Generate a white picture with a red frame on a black background
 	----------------------------------------- */ 
+<<<<<<< HEAD
 	// assign rgb = ~bright ? BLACK : frame ? WHITE : RED;
 	
 	/* -----------------------------------------
@@ -54,11 +55,18 @@ module vga_display (
 		else 
 			read <= 0;
 	end
+=======
+	// assign rgb = ~bright ? BLACK : frame ? RED : WHITE;
+>>>>>>> 3510bd85ea053380ffd3ec7b4e725fbf85ed5fdc
 	
 	/* -----------------------------------------
 		Comments
 	----------------------------------------- */ 
+<<<<<<< HEAD
 	// reg[2:0] rgb_r = RED;
+=======
+	reg[2:0] rgb_r;
+>>>>>>> 3510bd85ea053380ffd3ec7b4e725fbf85ed5fdc
 	
 	/*
 	always @ *	
@@ -68,6 +76,10 @@ module vga_display (
 		else // draw white rectangle
 			rgb_r <= WHITE;
 			
+<<<<<<< HEAD
 	*/
 	// assign rgb = rgb_r;
+=======
+	assign rgb = rgb_r;
+>>>>>>> 3510bd85ea053380ffd3ec7b4e725fbf85ed5fdc
 endmodule
