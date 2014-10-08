@@ -34,16 +34,12 @@ module vga_driver (
 	output reset;
 	output xclk;
 	
-	
 	// output led_out;
 	
 	/* -----------------------------------------
 		Internal wires
 	----------------------------------------- */
-<<<<<<< HEAD
 	// Clock wires
-=======
->>>>>>> 3510bd85ea053380ffd3ec7b4e725fbf85ed5fdc
 	wire clk_25;
 	wire [9:0] h_count;
 	wire [9:0] v_count;
@@ -54,9 +50,6 @@ module vga_driver (
 	----------------------------------------- */ 
 	
 	// Image wires
-	wire [9:0] h_count;
-	wire [9:0] v_count;
-	wire bright;
 	wire [2:0] data_out;
 	
 	// VGA Control wires
@@ -104,16 +97,15 @@ module vga_driver (
 		.h_count(h_count),
 		.v_count(v_count),
 		.bright(bright),
-<<<<<<< HEAD
+
 		.read(read),
 		.data(pixel_out),
-=======
->>>>>>> 3510bd85ea053380ffd3ec7b4e725fbf85ed5fdc
+
 		.rgb(rgb)
 	
 	);
 	
-<<<<<<< HEAD
+
 	/* VGA Camera 
 	vga_camera camera (
 	
@@ -150,9 +142,9 @@ module vga_driver (
 		.led_out(led_out)
 	
 	);*/
-=======
+
 	/* -----------------------------------------
 		Initial procedure
 	----------------------------------------- */ 
->>>>>>> 3510bd85ea053380ffd3ec7b4e725fbf85ed5fdc
+
 endmodule

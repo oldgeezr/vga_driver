@@ -1,4 +1,4 @@
-module i2c_master ();
+module i2c_master
 (
 	input	clk, in, reset,
 	output reg [1:0] out
