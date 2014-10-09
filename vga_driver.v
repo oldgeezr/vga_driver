@@ -50,15 +50,16 @@ module vga_driver (
 	----------------------------------------- */ 
 	
 	// Image wires
-	wire [2:0] data_out;
+	wire [1:0] data_out;
 	
 	// VGA Control wires
 	
 	// VGA Camera wires
 	wire write;
 	wire read;
-	wire [2:0] pixel_in;
-	wire [2:0] pixel_out;
+	wire h_sync;
+	wire [1:0] pixel_in;
+	wire [1:0] pixel_out;
 	
 	/* -----------------------------------------
 		Internal registers
@@ -83,6 +84,7 @@ module vga_driver (
 		.reset_n(reset_n),
 		.clk_25(clk_25),
 		.h_sync(hs),
+		.h_sync_c(h_sync),
 		.v_sync(vs),
 		.h_count(h_count),
 		.v_count(v_count),
@@ -97,16 +99,13 @@ module vga_driver (
 		.h_count(h_count),
 		.v_count(v_count),
 		.bright(bright),
-
-		.read(read),
 		.data(pixel_out),
-
 		.rgb(rgb)
 	
 	);
 	
 
-	/* VGA Camera 
+	// VGA Camera 
 	vga_camera camera (
 	
 		.reset(reset),
@@ -114,7 +113,7 @@ module vga_driver (
 		.clk_25(clk_25),
 		.xclk(xclk),
 		.pclk(pclk),
-		.write(write),
+		.h_sync(h_sync),
 		.data_in(data_in),
 		.data_out(data_out),
 		.h_ref(h_ref),
@@ -126,9 +125,8 @@ module vga_driver (
 	vga_table mem (
 		
 		.reset_n(reset_n),
-		.clk_50(clk_50),
-		.write(write),
-		.read(read),
+		.clk_25(clk_25),
+		.h_sync(h_sync),
 		.pixel_in(data_out),
 		.pixel_out(pixel_out)
 

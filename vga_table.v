@@ -4,9 +4,8 @@
 module vga_table (
 	
 	reset_n,
-	clk_50,
-	write,
-	read,
+	clk_25,
+	h_sync,
 	pixel_in,
 	pixel_out
 
@@ -16,47 +15,45 @@ module vga_table (
 		Inputs/Outputs
 	----------------------------------------- */ 
 	input reset_n;
-	input clk_50;
-	input write;
-	input read;
-	input [2:0] pixel_in;
-	output [2:0] pixel_out;
-	
-	wire [18:0] addr;
+	input clk_25;
+	input h_sync;
+	input [1:0] pixel_in;
+	output [1:0] pixel_out;
 	
 	/* -----------------------------------------
 		Parameters
 	----------------------------------------- */ 
-	parameter WIDTH = 3;
+	parameter WIDTH = 2;
 	parameter DEPTH = 640*240;
 	
 	/* -----------------------------------------
 		Registers
-	----------------------------------------- */ 
-	reg [18:0] in_pos;
-	reg [18:0] out_pos;
+	----------------------------------------- */
+	reg count;
+	reg write;
+	reg [14:0] write_addr;
+	reg [14:0] read_addr;
 	
-	assign addr = write ? in_pos : out_pos;
-	
-	// Write counter
-	always @ (posedge read or negedge reset_n) begin
-		if (!reset_n)
-			in_pos <= 0;
-		else begin
-			in_pos <= in_pos + 1;
-			if (in_pos == DEPTH-1) 
-				in_pos <= 0;
-		end
-	end
-	
-	// Read counter
-	always @ (posedge write or negedge reset_n) begin
-		if (!reset_n)
-			out_pos <= 0;
-		else begin
-			out_pos <= out_pos + 1;
-			if (out_pos == DEPTH-1) 
-				out_pos <= 0;
+	always @ (posedge clk_25 or negedge reset_n or negedge h_sync) begin
+		if (!reset_n) begin
+			count <= 0;
+			write <= 0;
+			write_addr <= 0;
+			read_addr <= 0;
+		end else if (!h_sync) begin
+			count <= 0;
+			write <= 0;
+			write_addr <= 0;
+			read_addr <= 0;
+		end else begin
+			if (count == 0) 
+				write <= 1;
+			else begin
+				write <= 0;
+				write_addr <= write_addr + 1;
+			end
+			count <= count + 1;
+			read_addr <= read_addr + 1;
 		end
 	end
 	
@@ -66,9 +63,10 @@ module vga_table (
 	vga_frame frame_buffer (
 		
 		.data(pixel_in),
-		.addr(addr),
+		.read_addr(read_addr),
+		.write_addr(write_addr),
 		.we(write),
-		.clk(clk_50),
+		.clk(clk_25),
 		.q(pixel_out)
 		
 	);

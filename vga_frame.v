@@ -1,30 +1,26 @@
 module vga_frame 
-#(parameter DATA_WIDTH=3, parameter ADDR_WIDTH=19, parameter N_PIXELS=(640*240))
+#(parameter DATA_WIDTH=2, parameter ADDR_WIDTH=15, N_PIXELS=(640*480))
 (
 	input [(DATA_WIDTH-1):0] data,
-	input [(ADDR_WIDTH-1):0] addr,
+	input [(ADDR_WIDTH-1):0] read_addr, write_addr,
 	input we, clk,
-	output [(DATA_WIDTH-1):0] q
+	output reg [(DATA_WIDTH-1):0] q
 );
 
 	// Declare the RAM variable
 	reg [DATA_WIDTH-1:0] ram[N_PIXELS-1:0];
 
-	// Variable to hold the registered read address
-	reg [ADDR_WIDTH-1:0] addr_reg;
-
 	always @ (posedge clk)
 	begin
 		// Write
 		if (we)
-			ram[addr] <= data;
+			ram[write_addr] <= data;
 
-		addr_reg <= addr;
+		// Read (if read_addr == write_addr, return OLD data).	To return
+		// NEW data, use = (blocking write) rather than <= (non-blocking write)
+		// in the write assignment.	 NOTE: NEW data may require extra bypass
+		// logic around the RAM.
+		q <= ram[read_addr];
 	end
-
-	// Continuous assignment implies read returns NEW data.
-	// This is the natural behavior of the TriMatrix memory
-	// blocks in Single Port mode.  
-	assign q = ram[addr_reg];
 
 endmodule

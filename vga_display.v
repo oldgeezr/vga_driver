@@ -1,16 +1,14 @@
 /* -----------------------------------------
 	VGA image generator
 ----------------------------------------- */ 
-module vga_display (
-
+module vga_display 
+(
 	clk_25,
 	h_count,
 	v_count,
 	bright,
-	read,
 	data,
 	rgb
-
 );
 	
 	/* -----------------------------------------
@@ -19,12 +17,10 @@ module vga_display (
 	input clk_25;
 	input [9:0] h_count;
 	input [9:0] v_count;
-	input [2:0] data;
+	input [1:0] data;
 	input bright;
 	
-	output reg read;
 	output [2:0] rgb;
-	reg [18:0] mem[0:(300000)];
 	
 	/* -----------------------------------------
 		Internal wires
@@ -35,8 +31,10 @@ module vga_display (
 		Paramters
 	----------------------------------------- */ 
 	parameter BLACK = 3'b000;
-	parameter RED = 3'b100;
-	parameter WHITE = 3'b111;
+	parameter WHITE = 3'b111; 	// 11
+	parameter L_BLUE = 3'b011;	// 10
+	parameter PURPLE = 3'b101;	// 01
+	parameter BLUE = 3'b001;   // 00
 
 	/* -----------------------------------------
 		Generate a white picture with a red frame on a black background
@@ -47,14 +45,7 @@ module vga_display (
 	/* -----------------------------------------
 		Generate a image from camera
 	----------------------------------------- */ 
-	assign rgb = ~bright ? BLACK : data;
-
-	always @ (posedge clk_25) begin
-		if (bright)
-			read <= 1;
-		else 
-			read <= 0;
-	end
+	assign rgb = ~bright ? BLACK : (data == 2'b11) ? BLUE : (data == 2'b10) ? PURPLE : (data == 2'b01) ? L_BLUE : WHITE;
 	
 	// assign rgb = ~bright ? BLACK : frame ? RED : WHITE;
 	
@@ -64,7 +55,7 @@ module vga_display (
 
 	// reg[2:0] rgb_r = RED;
 
-	reg[2:0] rgb_r;
+	// reg[2:0] rgb_r;
 
 	/*
 	always @ *	
@@ -78,6 +69,6 @@ module vga_display (
 	*/
 	// assign rgb = rgb_r;
 
-	assign rgb = rgb_r;
+	// assign rgb = rgb_r;
 
 endmodule
