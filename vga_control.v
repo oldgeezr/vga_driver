@@ -6,7 +6,6 @@ module vga_control (
 	reset_n,
 	clk_25,
 	h_sync,
-	h_sync_c,
 	v_sync,
 	h_count,
 	v_count,
@@ -29,14 +28,8 @@ module vga_control (
 	/* -----------------------------------------
 		Behavioural
 	----------------------------------------- */ 
-	always @ (posedge clk_25 or negedge reset_n or negedge h_sync_c) begin	
+	always @ (posedge clk_25 or negedge reset_n) begin	
 		if (!reset_n) begin
-			h_sync <= 1'b1;
-			v_sync <= 1'b1;
-			h_count = 10'b0000000000;
-			v_count = 10'b0000000000;
-			bright <= 1'b0;
-		end else if (!h_sync_c) begin
 			h_sync <= 1'b1;
 			v_sync <= 1'b1;
 			h_count = 10'b0000000000;

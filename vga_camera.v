@@ -33,7 +33,7 @@ module vga_camera
 	
 	assign reset = reset_n;
 	assign xclk = clk_25;
-	assign h_sync = h_ref;
+	assign h_sync = start;
 	
 	reg byte_nr;
 	reg start;

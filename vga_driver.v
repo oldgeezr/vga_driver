@@ -84,7 +84,6 @@ module vga_driver (
 		.reset_n(reset_n),
 		.clk_25(clk_25),
 		.h_sync(hs),
-		.h_sync_c(h_sync),
 		.v_sync(vs),
 		.h_count(h_count),
 		.v_count(v_count),
@@ -127,6 +126,7 @@ module vga_driver (
 		.reset_n(reset_n),
 		.clk_25(clk_25),
 		.h_sync(h_sync),
+		.bright(bright),
 		.pixel_in(data_out),
 		.pixel_out(pixel_out)
 

@@ -6,6 +6,7 @@ module vga_table (
 	reset_n,
 	clk_25,
 	h_sync,
+	bright,
 	pixel_in,
 	pixel_out
 
@@ -17,6 +18,7 @@ module vga_table (
 	input reset_n;
 	input clk_25;
 	input h_sync;
+	input bright;
 	input [1:0] pixel_in;
 	output [1:0] pixel_out;
 	
@@ -34,18 +36,23 @@ module vga_table (
 	reg [14:0] write_addr;
 	reg [14:0] read_addr;
 	
-	always @ (posedge clk_25 or negedge reset_n or negedge h_sync) begin
+	always @ (posedge clk_25 or negedge reset_n or negedge h_sync or posedge bright) begin
 		if (!reset_n) begin
 			count <= 0;
 			write <= 0;
 			write_addr <= 0;
 			read_addr <= 0;
-		end else if (!h_sync) begin
+		end else if (write_addr == DEPTH-1)
+			count <= 0;
+		else if (read_addr == DEPTH-1)
+			read_addr <= 0;
+		else if (!h_sync) begin
 			count <= 0;
 			write <= 0;
 			write_addr <= 0;
-			read_addr <= 0;
-		end else begin
+		end else if (bright)
+			read_addr <= read_addr + 1;
+		else begin
 			if (count == 0) 
 				write <= 1;
 			else begin
@@ -53,7 +60,6 @@ module vga_table (
 				write_addr <= write_addr + 1;
 			end
 			count <= count + 1;
-			read_addr <= read_addr + 1;
 		end
 	end
 	
