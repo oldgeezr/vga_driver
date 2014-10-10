@@ -1,15 +1,14 @@
 /* -----------------------------------------
 	VGA table/memory
 ----------------------------------------- */ 
-module vga_table (
-	
+module vga_table 
+(	
 	reset_n,
 	clk_25,
 	h_sync,
 	bright,
 	pixel_in,
 	pixel_out
-
 );
 	
 	/* -----------------------------------------
@@ -27,31 +26,37 @@ module vga_table (
 	----------------------------------------- */ 
 	parameter WIDTH = 2;
 	parameter DEPTH = 640*240;
+	parameter R_DVIVIDER = 4;
+	parameter W_DVIVIDER = 8;
 	
 	/* -----------------------------------------
 		Registers
 	----------------------------------------- */
-	reg count;
+	reg [2:0] r_count;
+	reg [3:0] w_count;
 	reg write;
 	reg [14:0] write_addr;
 	reg [14:0] read_addr;
 	
-	always @ (posedge clk_25 or negedge reset_n or negedge h_sync or posedge bright) begin
-		if (!reset_n) begin
+	always @ (posedge clk_25 or negedge bright) begin
+		if (!bright) begin
+			read_addr <= 0;
+			r_count <= 0;
+		end else begin
+			if (r_count < 7)
+				r_count <= r_count + 1;
+			else begin
+				read_addr <= read_addr + 1;
+				r_count <= 0;
+			end
+		end
+	end
+	
+	always @ (posedge clk_25 or negedge h_sync or posedge bright) begin
+		if (!h_sync) begin
 			count <= 0;
 			write <= 0;
 			write_addr <= 0;
-			read_addr <= 0;
-		end else if (write_addr == DEPTH-1)
-			count <= 0;
-		else if (read_addr == DEPTH-1)
-			read_addr <= 0;
-		else if (!h_sync) begin
-			count <= 0;
-			write <= 0;
-			write_addr <= 0;
-		end else if (bright)
-			read_addr <= read_addr + 1;
 		else begin
 			if (count == 0) 
 				write <= 1;

@@ -1,5 +1,5 @@
 module vga_frame 
-#(parameter DATA_WIDTH=2, parameter ADDR_WIDTH=15, N_PIXELS=(640*480))
+#(parameter DATA_WIDTH=2, parameter ADDR_WIDTH=15, N_PIXELS=(640*480), parameter DIVIDER = 4)
 (
 	input [(DATA_WIDTH-1):0] data,
 	input [(ADDR_WIDTH-1):0] read_addr, write_addr,
@@ -8,7 +8,7 @@ module vga_frame
 );
 
 	// Declare the RAM variable
-	reg [DATA_WIDTH-1:0] ram[N_PIXELS-1:0];
+	reg [DATA_WIDTH-1:0] ram[(N_PIXELS/DIVIDER)-1:0];
 
 	always @ (posedge clk)
 	begin
