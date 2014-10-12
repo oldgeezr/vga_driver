@@ -1,41 +1,24 @@
 /* -----------------------------------------
 	VGA driver
 ----------------------------------------- */ 
-module vga_driver (
-
-	reset,
-	reset_n,
-	clk_50,
-	xclk,
-	pclk,
-	data_in,
-	rgb,
-	hs,
-	vs,
-	h_ref,
-	v_sync
-	// led_out
-
+module vga_driver 
+(
+	// Inputs
+	input reset_n,
+	input clk_50,
+	input pclk,
+	input [7:0] data_in,
+	input h_ref,
+	input v_sync,
+	// Output
+	output [2:0] rgb,
+	output hs,
+	output vs,
+	output reset,
+	output xclk
+	// output led_out;
 );
 
-	/* -----------------------------------------
-		Inputs / Outputs
-	----------------------------------------- */ 
-	input reset_n;
-	input clk_50;
-	
-	input pclk;
-	input [7:0] data_in;
-	input h_ref;
-	input v_sync;
-	output [2:0] rgb;
-	output hs;
-	output vs;
-	output reset;
-	output xclk;
-	
-	// output led_out;
-	
 	/* -----------------------------------------
 		Internal wires
 	----------------------------------------- */

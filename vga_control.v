@@ -1,30 +1,19 @@
 /* -----------------------------------------
 	VGA control unit
 ----------------------------------------- */ 
-module vga_control (
-
-	reset_n,
-	clk_25,
-	h_sync,
-	v_sync,
-	h_count,
-	v_count,
-	bright
-
+module vga_control 
+(
+	// Input
+	input reset_n,
+	input clk_25,
+	// Output
+	output reg h_sync,
+	output reg v_sync,
+	output reg [9:0] h_count,
+	output reg [9:0] v_count,
+	output reg bright
 );
 
-	/* -----------------------------------------
-		Inputs / Outputs
-	----------------------------------------- */ 
-	input reset_n;
-	input clk_25;
-	
-	output reg h_sync;
-	output reg v_sync;
-	output reg [9:0] h_count;
-	output reg [9:0] v_count;
-	output reg bright;
-	
 	/* -----------------------------------------
 		Behavioural
 	----------------------------------------- */ 

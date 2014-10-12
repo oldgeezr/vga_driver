@@ -3,24 +3,16 @@
 ----------------------------------------- */ 
 module vga_table 
 (	
-	reset_n,
-	clk_25,
-	h_sync,
-	bright,
-	pixel_in,
-	pixel_out
+	// Input
+	input reset_n,
+	input clk_25,
+	input h_sync,
+	input bright,
+	input [1:0] pixel_in,
+	// Output
+	output [1:0] pixel_out
 );
-	
-	/* -----------------------------------------
-		Inputs/Outputs
-	----------------------------------------- */ 
-	input reset_n;
-	input clk_25;
-	input h_sync;
-	input bright;
-	input [1:0] pixel_in;
-	output [1:0] pixel_out;
-	
+
 	/* -----------------------------------------
 		Parameters
 	----------------------------------------- */ 
@@ -38,6 +30,7 @@ module vga_table
 	reg [14:0] write_addr;
 	reg [14:0] read_addr;
 	
+	// Start the read counter when in the bright area
 	always @ (posedge clk_25 or negedge bright) begin
 		if (!bright) begin
 			read_addr <= 0;
@@ -52,19 +45,20 @@ module vga_table
 		end
 	end
 	
-	always @ (posedge clk_25 or negedge h_sync or posedge bright) begin
+	// Start the write counter at the synchronization puls from camera
+	always @ (posedge clk_25 or negedge h_sync) begin
 		if (!h_sync) begin
-			count <= 0;
+			w_count <= 0;
 			write <= 0;
 			write_addr <= 0;
-		else begin
-			if (count == 0) 
+		end else begin
+			if (w_count == 0) 
 				write <= 1;
 			else begin
 				write <= 0;
 				write_addr <= write_addr + 1;
 			end
-			count <= count + 1;
+			w_count <= w_count + 1;
 		end
 	end
 	

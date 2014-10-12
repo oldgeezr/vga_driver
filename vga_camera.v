@@ -3,38 +3,23 @@
 ----------------------------------------- */ 
 module vga_camera 
 (
-	reset,
-	reset_n,
-	clk_25,
-	xclk,
-	pclk,
-	data_in,
-	data_out,
-	h_ref,
-	h_sync,
-	v_sync
-	
+	// Input
+	input reset_n,
+	input clk_25,
+	input pclk,
+	input [7:0] data_in,
+	input h_ref,
+	input v_sync,
+	// Output
+	output h_sync,
+	output reset,
+	output xclk,
+	output reg [1:0] data_out
 );
-
+	
 	/* -----------------------------------------
-		Inputs/Outputs
+		Registers
 	----------------------------------------- */ 
-	input reset_n;
-	input clk_25;
-	input pclk;
-	input [7:0] data_in;
-	input h_ref;
-	input v_sync;
-	
-	output h_sync;
-	output reset;
-	output xclk;
-	output reg [1:0] data_out;
-	
-	assign reset = reset_n;
-	assign xclk = clk_25;
-	assign h_sync = start;
-	
 	reg byte_nr;
 	reg start;
 	reg [1:0] count;
@@ -44,6 +29,9 @@ module vga_camera
 	----------------------------------------- */ 
 	parameter divider = 64;
 	
+	/* -----------------------------------------
+		Behavioural
+	----------------------------------------- */
 	always @ (h_ref) begin
 		if (h_ref)
 			start <= 1;
@@ -72,5 +60,9 @@ module vga_camera
 			byte_nr <= byte_nr + 1;
 		end	
 	end
+	
+	assign reset = reset_n;
+	assign xclk = clk_25;
+	assign h_sync = start;
 	
 endmodule
