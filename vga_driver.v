@@ -24,9 +24,9 @@ module vga_driver
 	----------------------------------------- */
 	// Clock wires
 	wire clk_25;
-	wire [9:0] h_count;
-	wire [9:0] v_count;
-	wire bright;
+	//wire [9:0] h_count;
+	//wire [9:0] v_count;
+	//wire bright;
 	
 	/* -----------------------------------------
 		Internal registers
@@ -38,11 +38,11 @@ module vga_driver
 	// VGA Control wires
 	
 	// VGA Camera wires
-	wire write;
-	wire read;
-	wire h_sync;
-	wire [1:0] pixel_in;
-	wire [1:0] pixel_out;
+	//wire write;
+	//wire read;
+	//wire h_sync;
+	//wire [1:0] pixel_in;
+	//wire [1:0] pixel_out;
 	
 	/* -----------------------------------------
 		Internal registers
@@ -61,7 +61,7 @@ module vga_driver
 	
 	);
 	
-	// VGA control unit
+	/* VGA control unit
 	vga_control vga_control (
 	
 		.reset_n(reset_n),
@@ -84,10 +84,24 @@ module vga_driver
 		.data(pixel_out),
 		.rgb(rgb)
 	
-	);
+	);*/
 	
+	camera_control camera
+	(
+		.reset_n(reset_n),
+		.reset(reset),
+		.clk_25(clk_25),
+		.pclk(pclk),
+		.xclk(xclk),
+		.data_in(data_in),
+		.h_ref(h_ref),
+		.v_sync(v_sync),
+		.hs(hs),
+		.vs(vs),
+		.data_out(rgb),
+	);
 
-	// VGA Camera 
+	/* VGA Camera 
 	vga_camera camera (
 	
 		.reset(reset),
@@ -103,7 +117,7 @@ module vga_driver
 	
 	);
 	
-	// Frame buffer
+	/* Frame buffer
 	vga_table mem (
 		
 		.reset_n(reset_n),
