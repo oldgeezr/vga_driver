@@ -5,7 +5,7 @@ module camera_control
 (
 	// Input
 	input reset_n,
-	input clk_25,
+	input clk_24,
 	input pclk,
 	input [7:0] data_in,
 	input h_ref,
@@ -18,68 +18,49 @@ module camera_control
 	output reg [2:0] data_out
 );
 
-	/* -----------------------------------------
-		Paramters
-	----------------------------------------- */ 
-	parameter divider = 64;
-	
-	/* -----------------------------------------
-		Registers
-	----------------------------------------- */
-	reg [18:0] h_count;
-	reg [18:0] v_count;
-	reg byte_nr;
-
-	/* -----------------------------------------
-		Behavioural
-	----------------------------------------- */ 
 	assign reset = reset_n;
-	assign xclk = clk_25;
+	assign xclk = clk_24;
 	assign vs = ~v_sync;
 	
-	always @ (posedge clk_25 or negedge reset_n) begin	
-		if (!reset_n) begin
+	reg [9:0] h_count;
+	reg byte_nr;
+	
+	parameter BLACK = 3'b000;
+	parameter WHITE = 3'b111;
+	
+	always @ (posedge pclk or posedge v_sync) begin
+		
+		// Reset horisontal counter at new frame
+		if (v_sync) begin
 			h_count <= 0;
-			v_count <= 0;
-			byte_nr <= 0;
 		end else begin
-			if (v_sync) begin
-				v_count <= 0;
-				h_count <= 0;
-				byte_nr <= 0;
+		
+			// Send horisontal synchronization pulse
+			if (h_count < 80) begin 
+				hs <= 0;
 			end else begin
-			
 				hs <= 1;
+			end
 			
-				if (v_count >= (13328 - 80 - 45) && v_count <= (13328 - 45)) begin
-					// Send sync pulse
-					hs <= 0;
-				// After the back porch and before the front porch
-				end else if (v_count >= 13328 && v_count <= (13328 + 376320)) begin
-					if (!h_ref) begin
-						// Not valid data
-						if (h_count >= 19 && h_count <= (19 + 80)) begin
-							hs <= 0;
-						end
+			// Output given the Y component of YUV
+			if (h_ref) begin
+				if (byte_nr) begin
+					if (data_in < 128) begin
+						data_out <= BLACK;
 					end else begin
-						if (byte_nr) begin
-							// Valid data
-							if (data_in >= 0 && data_in <= divider-1) 
-								data_out <= 3'b001; // 2'b11; // BLUE
-							else if (data_in >= divider && data_in <= divider*2-1) 
-								data_out <= 3'b101; // 2'b10; // PURPLE
-							if (data_in >= divider*2 && data_in <= divider*3-1)
-								data_out <= 3'b011; // 2'b01; // L_BLUE
-							else
-								data_out <= 3'b111; // 2'b00; // WHITE
-						end else
-							data_out <= 3'b111; // 2'b00; // WHITE
-						byte_nr <= byte_nr + 1;
-						h_count <= 0;
+						data_out <= WHITE;
 					end
-				end 
-				v_count <= v_count + 1;
+				end
+				byte_nr <= byte_nr + 1;
+			end
+			
+			// Reset the horisontal counter when maxed
+			if (h_count < 784) begin
+				h_count <= h_count + 1;
+			end else begin
+				h_count <= 0;
 			end
 		end
 	end
+	
 endmodule

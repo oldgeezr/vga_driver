@@ -6,6 +6,7 @@ module vga_driver
 	// Inputs
 	input reset_n,
 	input clk_50,
+	input clk_24,
 	input pclk,
 	input [7:0] data_in,
 	input h_ref,
@@ -52,14 +53,14 @@ module vga_driver
 		Components
 	----------------------------------------- */ 
 	
-	// Clock divider by 2
+	/* Clock divider by 2
 	clk_gen clk_divider (
 	
 		.reset_n(reset_n),
 		.clk_50(clk_50),
 		.clk_25(clk_25)
 	
-	);
+	);*/
 	
 	/* VGA control unit
 	vga_control vga_control (
@@ -90,7 +91,7 @@ module vga_driver
 	(
 		.reset_n(reset_n),
 		.reset(reset),
-		.clk_25(clk_25),
+		.clk_24(clk_24),
 		.pclk(pclk),
 		.xclk(xclk),
 		.data_in(data_in),
@@ -98,7 +99,7 @@ module vga_driver
 		.v_sync(v_sync),
 		.hs(hs),
 		.vs(vs),
-		.data_out(rgb),
+		.data_out(rgb)
 	);
 
 	/* VGA Camera 
@@ -117,7 +118,7 @@ module vga_driver
 	
 	);
 	
-	/* Frame buffer
+	// Frame buffer
 	vga_table mem (
 		
 		.reset_n(reset_n),
@@ -129,7 +130,7 @@ module vga_driver
 
 	);
 	
-	/* Led blinker
+	// Led blinker
 	led_blinker blinker (
 	
 		.reset_n(reset_n),
