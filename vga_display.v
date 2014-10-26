@@ -8,7 +8,8 @@ module vga_display
 	v_count,
 	bright,
 	data,
-	rgb
+	rgb,
+	pixel_addr
 );
 	
 	/* -----------------------------------------
@@ -17,10 +18,11 @@ module vga_display
 	input clk_25;
 	input [9:0] h_count;
 	input [9:0] v_count;
-	input [1:0] data;
+	input data;
 	input bright;
 	
 	output [2:0] rgb;
+	output reg [14:0] pixel_addr = 0;
 	
 	/* -----------------------------------------
 		Internal wires
@@ -35,40 +37,19 @@ module vga_display
 	parameter L_BLUE = 3'b011;	// 10
 	parameter PURPLE = 3'b101;	// 01
 	parameter BLUE = 3'b001;   // 00
-
-	/* -----------------------------------------
-		Generate a white picture with a red frame on a black background
-	----------------------------------------- */ 
-
-	// assign rgb = ~bright ? BLACK : frame ? WHITE : RED;
 	
-	/* -----------------------------------------
-		Generate a image from camera
-	----------------------------------------- */ 
-	assign rgb = ~bright ? BLACK : (data == 2'b11) ? BLUE : (data == 2'b10) ? PURPLE : (data == 2'b01) ? L_BLUE : WHITE;
+	// Read pixel from framebuffer at address
+	always @ (posedge clk_25) begin
+		
+		if (pixel_addr == 19200) begin
+			pixel_addr <= 0;
+		end
+		
+		if (bright) begin
+			pixel_addr <= pixel_addr + 1;
+		end
+	end
 	
-	// assign rgb = ~bright ? BLACK : frame ? RED : WHITE;
-	
-	/* -----------------------------------------
-		Comments
-	----------------------------------------- */ 
-
-	// reg[2:0] rgb_r = RED;
-
-	// reg[2:0] rgb_r;
-
-	/*
-	always @ *	
-		if (~bright) rgb_r <= BLACK; // draw black if not in the bright zone
-		else if ((h_count >= (16 + 48 + 96 + 10) && h_count <= (800 - 10)) && (v_count >= (10 + 2 + 29 + 10) && v_count <= (521 - 10))) // draw 10 px red frame
-			rgb_r <= RED;
-		else // draw white rectangle
-			rgb_r <= WHITE;
-			
-
-	*/
-	// assign rgb = rgb_r;
-
-	// assign rgb = rgb_r;
+	assign rgb = ~bright ? BLACK : {data, data, data};
 
 endmodule

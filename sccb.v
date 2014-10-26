@@ -1,18 +1,18 @@
 module sccb 
 (
 	input reset_n,
-	input clk_24,
+	input clk_50,
 	input en,
 	
 	output sio_c,
 	output sio_d
 );
 
-	parameter input_clk = 24_000_000;
+	parameter input_clk = 50_000_000;
 	parameter bus_clk = 400_000;
 	parameter divider = (input_clk/bus_clk/4);
 
-	reg [5:0] counter; // divider*4 = 60 => 2^6
+	reg [6:0] counter; // divider*4 = 125 => 2^7
 	reg stretch;
 	reg s_clk;
 	reg d_clk;
@@ -20,8 +20,8 @@ module sccb
 	reg data;
 
 	// Generate SIO_C DATA_C at 400kHz
-	always @ (posedge clk_24 or negedge reset_n) begin
-		if (!reset_n) begin
+	always @ (posedge clk_50 or negedge reset_n) begin
+		if (~reset_n) begin
 			counter <= 0;
 			stretch <= 0;
 		end else begin
@@ -29,6 +29,7 @@ module sccb
 				counter <= 0;
 			else if (stretch == 0)
 				counter <= counter + 1;
+				
 			if (counter >= 0 && counter <= divider*1-1) begin
 				s_clk <= 0;
 				d_clk <= 0;
@@ -36,6 +37,11 @@ module sccb
 				s_clk <= 0;
 				d_clk <= 1;
 			end else if (counter >= divider*2 && counter <= divider*3-1) begin
+				if (sio_c == 0) begin
+					stretch <= 1;
+				end else begin
+					stretch <= 0;
+				end
 				s_clk <= 1;
 				d_clk <= 1;
 			end else begin
@@ -49,7 +55,7 @@ module sccb
 	reg state, next_state;
 	
 	always @ (posedge d_clk) begin
-		if (!reset_n) begin
+		if (~reset_n) begin
 			sio_c_en <= 0;
 		end else begin
 			case (state)

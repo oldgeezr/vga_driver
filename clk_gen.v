@@ -13,8 +13,8 @@ module clk_gen (
 		Behavioural
 	----------------------------------------- */ 
 	always @ (posedge clk_50 or negedge reset_n) begin
-		if (!reset_n)
-			clk_25 <= 1'b0;
+		if (~reset_n)
+			clk_25 <= 0;
 		else
 			clk_25 <= ~clk_25;
 	end

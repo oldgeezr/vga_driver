@@ -49,8 +49,8 @@ module vga_control
 			else
 				v_sync <= 1'b1;
 			
-			// Generate bright signal
-			if ((h_count >= (16 + 96 + 48) && h_count < 800) && (v_count >= (10 + 2 + 29) && v_count < 521))
+			// Generate bright signal IMPORTANT! modified for 160x120
+			if ((h_count >= (16 + 96 + 48 + 240) && h_count < (800 - 240)) && (v_count >= (10 + 2 + 29 + 180) && v_count < (521 - 180)))
 				bright <= 1'b1;
 			else 
 				bright <= 1'b0;
