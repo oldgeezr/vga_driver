@@ -2,7 +2,9 @@
   VGA driver
 ----------------------------------------- */
 module vga_driver
-#(parameter ADDR_WIDTH = 15) // Video format: QQVGA = 160x120 => 2^15
+#(
+  parameter ADDR_WIDTH = 15 // Video format: QQVGA = 160x120 => 2^15
+)
 (
   // Inputs
   input         reset_n,

@@ -2,13 +2,15 @@
   VGA control unit
 ----------------------------------------- */
 module camera_controller
-#(parameter ADDR_WIDTH = 15) // Video format: QQVGA = 160x120 => 2^15
+#(
+  parameter ADDR_WIDTH = 15 // Video format: QQVGA = 160x120 => 2^15
+)
 (
   // Input
   input                   reset_n,
   input                   clk_25,
   input                   pclk,
-  input [7:0]             data_in,
+  input             [7:0] data_in,
   input                   h_ref,
   input                   v_sync,
   // Input and output
