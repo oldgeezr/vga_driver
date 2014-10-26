@@ -47,7 +47,7 @@ module vga_capture
 				v_row <= v_row + 1;
 				write_addr <= 2**ADDR_WIDTH-1;
 			end else begin
-				if (v_row == 0) begin // Get every 8'th row
+				if (v_row == 0) begin // Get every 8'th row CHECK IF PCLK IS IN FACT 25 MHZ!
 					if (h_ref) begin 
 						if (h_byte == 0) begin
 							Y <= data_in; // Get every 8'th byte

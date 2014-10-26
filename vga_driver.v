@@ -101,7 +101,7 @@ module vga_driver
 		.write_addr		(write_addr),
 		.we				(we),
 		.read_clock		(clk_25), 
-		.write_clock	(clk_25), // Try with both clk_25 and pclk. pclk might be unstable
+		.write_clock	(pclk), // Try with both clk_25 and pclk. pclk might be unstable
 		.q					(q)
 	);
 
