@@ -27,17 +27,17 @@ module vga_driver
   /* -----------------------------------------
     Internal wires
   ----------------------------------------- */
-  // Clock wires
-  wire        clk_25;
-  wire [9:0]  h_count;
-  wire [9:0]  v_count;
-  wire        bright;
+  wire                  clk_25;
+  wire            [9:0] h_count;
+  wire            [9:0] v_count;
+  wire                  bright;
+  wire                  pixel;
+  wire [ADDR_WIDTH-1:0] write_addr;
+  wire [ADDR_WIDTH-1:0] read_addr;
+  wire                  we;
+  wire                  q;
 
-  /* -----------------------------------------
-    Internal registers
-  ----------------------------------------- */
-
-  // Clock divider by 2
+  // Clock Divider (clk_in/2)
   clk_gen clk_divider
   (
     .reset_n      (reset_n),
@@ -45,7 +45,7 @@ module vga_driver
     .clk_25       (clk_25)
   );
 
-  // VGA control unit
+  // VGA Control Unit
   vga_control vga_control
   (
     .reset_n      (reset_n),
@@ -57,13 +57,7 @@ module vga_driver
     .bright       (bright)
   );
 
-  wire                  pixel;
-  wire [ADDR_WIDTH-1:0] write_addr;
-  wire [ADDR_WIDTH-1:0] read_addr;
-  wire                  we;
-  wire                  q;
-
-  // Image generator
+  // Image Generator
   vga_display image
   (
     .h_count      (h_count),
@@ -74,6 +68,7 @@ module vga_driver
     .pixel_addr   (read_addr)
   );
 
+  // Camera Control Unit
   camera_controller camera
   (
     .reset_n      (reset_n),
@@ -92,6 +87,7 @@ module vga_driver
     .pixel        (pixel)
   );
 
+  // Framebuffer
   framebuffer_dual_port framebuffer
   (
     .data         (pixel),

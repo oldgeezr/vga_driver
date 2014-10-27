@@ -1,14 +1,11 @@
-// Quartus II Verilog Template
-// Simple Dual Port RAM with separate read/write addresses and
-// separate read/write clocks
-
-// Modified
-
+/* -----------------------------------------
+  Framebuffer 160x120 QQVGA
+----------------------------------------- */
 module framebuffer_dual_port
 #(
   parameter DATA_WIDTH=1,
   parameter ADDR_WIDTH=15
-) // Capable of storing (640/4)*(480/4) bits
+)
 (
   input       [(DATA_WIDTH-1):0] data,
   input       [(ADDR_WIDTH-1):0] read_addr,
@@ -22,6 +19,9 @@ module framebuffer_dual_port
   // Declare the RAM variable
   reg [DATA_WIDTH-1:0] ram[2**ADDR_WIDTH-1:0];
 
+  /* -----------------------------------------
+    Behavioural
+  ----------------------------------------- */
   always @ (posedge write_clock) begin
     // Write
     if (we)

@@ -1,5 +1,10 @@
+/* -----------------------------------------
+  VGA Capture 160x120 QQVGA
+----------------------------------------- */
 module vga_capture
-#(parameter ADDR_WIDTH = 15) // Video format: QQVGA = 160x120 => 2^15
+#(
+  parameter ADDR_WIDTH = 15
+)
 (
   input                       reset_n,
   input                       pclk,
@@ -12,12 +17,21 @@ module vga_capture
   output reg                  we
 );
 
+  /* -----------------------------------------
+   Internal wiring
+  ----------------------------------------- */
+  wire v_pulse;
+
+  /* -----------------------------------------
+   Internal registers
+  ----------------------------------------- */
   reg       v_sync_inv;
   reg [2:0] h_byte; // 0-7
   reg [2:0] v_row; // 0-7
 
-  wire v_pulse;
-
+  /* -----------------------------------------
+    Behavioural
+  ----------------------------------------- */
   // Generate the inverted v_sync signal
   always @ (posedge pclk or negedge reset_n) begin
     if (~reset_n) begin

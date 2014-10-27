@@ -26,6 +26,9 @@ module vga_display
   parameter PURPLE  = 3'b101; // 01
   parameter BLUE    = 3'b001;   // 00
 
+  /* -----------------------------------------
+    Behavioural
+  ----------------------------------------- */
   // Read pixel from framebuffer at address
   always @ (posedge clk_25) begin
 

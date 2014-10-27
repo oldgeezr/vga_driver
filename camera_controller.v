@@ -1,5 +1,5 @@
 /* -----------------------------------------
-  VGA control unit
+  Camera Control Unit
 ----------------------------------------- */
 module camera_controller
 #(
@@ -25,18 +25,24 @@ module camera_controller
   output                  pixel
 );
 
+  /* -----------------------------------------
+    Internal wiring
+  ----------------------------------------- */
   wire [7:0] Y;
 
+  /* -----------------------------------------
+    Behavioural
+  ----------------------------------------- */
+  // Pass clock signal to camera
   assign xclk = clk_25; // Maybe try to use clk_50 and set the registers
+  // Pass inverted reset to camera
   assign reset = ~reset_n; // Should be active high
-
   // Turn on camera
   assign pwdn = 0; // Should be active high
-
-  // Hold SCCB data line high imp and clk high
+  // Hold SCCB data line high impedance
   assign sio_d = 1'bz;
+  // Hold SCCB clock line high
   assign sio_c = 1;
-
   // Comprise 8 bits to 1 bit. Go from 255 colors to 2 colors
   assign pixel = (Y[7:6] == 0) ? 0 : 1; // Pixel is either BLACK or WHITE
 
