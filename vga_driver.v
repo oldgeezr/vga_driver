@@ -24,6 +24,10 @@ module vga_driver
   output        pwdn,
   output        xclk
 );
+
+  // TODO: Use ALTPLL, make double framebuffer
+
+
   /* -----------------------------------------
     Internal wires
   ----------------------------------------- */
