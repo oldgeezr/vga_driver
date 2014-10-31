@@ -40,24 +40,24 @@ module framebuffer_dual_port_tb
       data <= 0;
 
     if (h_count < 160)
-      h_count <= 0;
-    else
       h_count <= h_count + 1;
+    else
+      h_count <= 0;
 
     if (v_count < 120)
-      v_count <= 0;
-    else
       v_count <= v_count + 1;
+    else
+      v_count <= 0;
 
     if (read_addr < 19200)
-      read_addr <= 0;
-    else
       read_addr <= read_addr + 1;
+    else
+      read_addr <= 0;
 
     if (write_addr < 19200)
-      write_addr <= 0;
-    else
       write_addr <= write_addr + 1;
+    else
+      write_addr <= 0;
   end
 
 
