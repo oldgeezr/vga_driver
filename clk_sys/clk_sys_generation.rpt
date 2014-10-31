@@ -1,0 +1,33 @@
+Info: Starting: Create block symbol file (.bsf)
+Info: ip-generate --project-directory=C:\altera\14.0\vga_driver --output-directory=C:\altera\14.0\vga_driver\clk_sys --report-file=bsf:C:\altera\14.0\vga_driver\clk_sys\clk_sys.bsf --system-info=DEVICE_FAMILY="Cyclone IV E" --system-info=DEVICE=EP4CE22F17C6 --system-info=DEVICE_SPEEDGRADE=6 --component-file=C:\altera\14.0\vga_driver\clk_sys.qsys
+Progress: Loading vga_driver/clk_sys.qsys
+Progress: Reading input file
+Progress: Adding altclkctrl_0 [altclkctrl 14.0]
+Progress: Parameterizing module altclkctrl_0
+Progress: Building connections
+Progress: Parameterizing connections
+Progress: Validating
+Progress: Done reading input file
+: clk_sys.altclkctrl_0: Targeting device family: Cyclone IV E.
+: clk_sys.altclkctrl_0: Global clock network allows a clock signal to reach all parts of the chip with the same amount of skew. Input port 'clkselect' can be used to switch between four clock inputs.
+Info: ip-generate succeeded.
+Info: Finished: Create block symbol file (.bsf)
+Info: 
+Info: Starting: Create HDL design files for synthesis
+Info: ip-generate --project-directory=C:\altera\14.0\vga_driver --output-directory=C:\altera\14.0\vga_driver\clk_sys\synthesis --file-set=QUARTUS_SYNTH --report-file=html:C:\altera\14.0\vga_driver\clk_sys\clk_sys.html --report-file=sopcinfo:C:\altera\14.0\vga_driver\clk_sys.sopcinfo --report-file=cmp:C:\altera\14.0\vga_driver\clk_sys\clk_sys.cmp --report-file=qip:C:\altera\14.0\vga_driver\clk_sys\synthesis\clk_sys.qip --report-file=svd:C:\altera\14.0\vga_driver\clk_sys\synthesis\clk_sys.svd --report-file=regmap:C:\altera\14.0\vga_driver\clk_sys\synthesis\clk_sys.regmap --report-file=xml:C:\altera\14.0\vga_driver\clk_sys\clk_sys.xml --report-file=debuginfo:C:\altera\14.0\vga_driver\clk_sys\synthesis\clk_sys.debuginfo --system-info=DEVICE_FAMILY="Cyclone IV E" --system-info=DEVICE=EP4CE22F17C6 --system-info=DEVICE_SPEEDGRADE=6 --component-file=C:\altera\14.0\vga_driver\clk_sys.qsys --language=VERILOG
+Progress: Loading vga_driver/clk_sys.qsys
+Progress: Reading input file
+Progress: Adding altclkctrl_0 [altclkctrl 14.0]
+Progress: Parameterizing module altclkctrl_0
+Progress: Building connections
+Progress: Parameterizing connections
+Progress: Validating
+Progress: Done reading input file
+: clk_sys.altclkctrl_0: Targeting device family: Cyclone IV E.
+: clk_sys.altclkctrl_0: Global clock network allows a clock signal to reach all parts of the chip with the same amount of skew. Input port 'clkselect' can be used to switch between four clock inputs.
+Info: clk_sys: Generating clk_sys "clk_sys" for QUARTUS_SYNTH
+Info: altclkctrl_0: Generating top-level entity clk_sys_altclkctrl_0.
+Info: altclkctrl_0: "clk_sys" instantiated altclkctrl "altclkctrl_0"
+Info: clk_sys: Done "clk_sys" with 2 modules, 2 files
+Info: ip-generate succeeded.
+Info: Finished: Create HDL design files for synthesis

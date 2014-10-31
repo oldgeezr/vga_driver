@@ -20,15 +20,20 @@ module camera_controller
   output                  pwdn,
   output                  xclk,
   output                  sio_c,
-  output                  we,
-  output [ADDR_WIDTH-1:0] write_addr,
-  output                  pixel
+  output reg                 we,
+  output reg [ADDR_WIDTH-1:0] write_addr,
+  output reg                 pixel
 );
 
+	reg [7:0] h_count;
+	reg [6:0] v_count;
+
   wire [7:0] Y;
+  
+  wire [ADDR_WIDTH-1:0] pixel_addr;
 
   assign xclk = clk_25; // Maybe try to use clk_50 and set the registers
-  assign reset = ~reset_n; // Should be active high
+  assign reset = reset_n; // Should be active low
 
   // Turn on camera
   assign pwdn = 0; // Should be active high
@@ -38,7 +43,42 @@ module camera_controller
   assign sio_c = 1;
 
   // Comprise 8 bits to 1 bit. Go from 255 colors to 2 colors
-  assign pixel = (Y[7:6] == 0) ? 0 : 1; // Pixel is either BLACK or WHITE
+  // assign pixel = (Y[7:5] == 7) ? 1 : 0; // Pixel is either BLACK or WHITE
+  
+	 always @ (posedge pclk or negedge reset_n) begin
+			if (~reset_n) begin
+				h_count <= 0;
+				v_count <= 0;
+				write_addr <= 2**ADDR_WIDTH-1;
+				we <= 0;
+			end else begin
+			  we <= 1;
+			  if ((v_count >= 40 && v_count < 80) && (h_count >= 40 && h_count < 120)) begin
+					pixel <= 0;
+			  end else begin
+					pixel <= 1;
+			  end
+			  
+			  if (h_count < 160) begin
+				 h_count <= h_count + 1;
+			  end else begin
+				 h_count <= 0;
+				 if (v_count < 120 ) begin
+					v_count <= v_count + 1;
+				 end else begin
+					v_count <= 0;
+				 end
+			  end
+			
+			
+				 
+				if (write_addr < 19200) begin
+						write_addr <= write_addr + 1;
+				end else begin
+					write_addr <= 0;
+			   end	
+			end
+		end 
 
   // Capture valid pixels
   vga_capture ov7670_camera
@@ -49,8 +89,8 @@ module camera_controller
     .v_sync         (v_sync),
     .data_in        (data_in),
     .Y              (Y),
-    .write_addr     (write_addr),
-    .we             (we)
+    .write_addr     (pixel_addr),
+    .we             ()
   );
 
 endmodule

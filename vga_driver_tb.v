@@ -22,7 +22,7 @@ module vga_driver_tb();
   vga_driver vga_driver (
 
     .reset_n    (reset_n),
-    .clk_50     (clk_50),
+    .clk     		(clk_50),
     .pclk       (pclk),
     .data_in    (data_in),
     .h_ref      (h_ref),

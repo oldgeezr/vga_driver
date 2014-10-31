@@ -8,7 +8,7 @@ module vga_driver
 (
   // Inputs
   input         reset_n,
-  input         clk_50,
+  input         clk,
   input         pclk,
   input [7:0]   data_in,
   input         h_ref,
@@ -24,11 +24,21 @@ module vga_driver
   output        pwdn,
   output        xclk
 );
+
+	sys_clk clock (
+		.inclk0(clk),
+		.c0(clk_50),
+		.c1(clk_25),
+		.locked(locked)
+	);
+
   /* -----------------------------------------
     Internal wires
   ----------------------------------------- */
   // Clock wires
   wire        clk_25;
+  wire 			clk_50;
+  wire 			locked;
   wire [9:0]  h_count;
   wire [9:0]  v_count;
   wire        bright;
@@ -37,13 +47,13 @@ module vga_driver
     Internal registers
   ----------------------------------------- */
 
-  // Clock divider by 2
+  /* Clock divider by 2
   clk_gen clk_divider
   (
     .reset_n      (reset_n),
     .clk_50       (clk_50),
     .clk_25       (clk_25)
-  );
+  );*/
 
   // VGA control unit
   vga_control vga_control
@@ -66,6 +76,8 @@ module vga_driver
   // Image generator
   vga_display image
   (
+		.reset_n(reset_n),
+		.clk_25(clk_25),
     .h_count      (h_count),
     .v_count      (v_count),
     .bright       (bright),
@@ -77,7 +89,7 @@ module vga_driver
   camera_controller camera
   (
     .reset_n      (reset_n),
-    .clk_25       (clk_25),
+    .clk_25       (clk_25), // temp send in clk_50
     .pclk         (pclk),
     .data_in      (data_in),
     .h_ref        (h_ref),
@@ -91,7 +103,19 @@ module vga_driver
     .write_addr   (write_addr),
     .pixel        (pixel)
   );
-
+	
+	/*
+  reg clk;
+	
+	initial begin
+		clk = 0;
+	end
+	
+	// Scale clock
+	always @ (posedge clk_50) begin
+		clk <= ~clk;
+	end*/
+  
   framebuffer_dual_port framebuffer
   (
     .data         (pixel),

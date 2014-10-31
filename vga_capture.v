@@ -39,7 +39,7 @@ module vga_capture
       write_addr <= 2**ADDR_WIDTH-1;
       we <= 0;
     end else begin
-
+		// if pclk = 1
       we <= 0;
 
       if (v_pulse) begin

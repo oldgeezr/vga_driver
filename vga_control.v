@@ -29,7 +29,7 @@ module vga_control
       // Horisontal counter
       if (h_count == 800) begin
         h_count <= 0;
-        v_count <= v_count + 1;
+        v_count <= v_count + 10'b1;
       end else
         h_count <= h_count + 1;
 
