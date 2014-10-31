@@ -4,27 +4,60 @@ module framebuffer_dual_port_tb
   parameter ADDR_WIDTH=15
 ) ();
 
-  wire       [(DATA_WIDTH-1):0] data;
-  wire       [(ADDR_WIDTH-1):0] read_addr;
-  wire       [(ADDR_WIDTH-1):0] write_addr;
-  wire                          we;
-  wire                          read_clock;
-  wire                          write_clock,
-  reg        [(DATA_WIDTH-1):0] q;
-  reg                           clk;
+  reg        [(DATA_WIDTH-1):0] data;
+  reg        [(ADDR_WIDTH-1):0] read_addr;
+  reg        [(ADDR_WIDTH-1):0] write_addr;
+  reg                           we;
+  reg                           read_clock;
+  reg                           write_clock;
+  wire        [(DATA_WIDTH-1):0] q;
+
+  reg [7:0] h_count;
+  reg [6:0] v_count;
 
   initial begin
-    clk = 0;
+    read_clock = 0;
+    write_clock = 0;
+    data = 1;
     read_addr = 0;
     write_add = 0;
-    we = 0;
+    we = 1;
+
+    h_count = 0;
+    v_count = 0;
   end
 
-  always * begin
-    #5 clk <= ~clk;
+  always #10 write_clock <= ~write_clock;
+  always #6 read_clock <= ~read_clock;
+
+  always @ (posedge write_clock) begin
+
+    data <= 1;
+
+    if ((h_count >= 40 && h_count < 120) && (v_count >= 30 && v_count < 90))
+      data <= 0;
+
+    if (h_count < 160)
+      h_count <= 0;
+    else
+      h_count <= h_count + 1;
+
+    if (v_count < 120)
+      v_count <= 0;
+    else
+      v_count <= v_count + 1;
+
+    if (read_addr < 19200)
+      read_addr <= 0;
+    else
+      read_addr <= read_addr + 1;
+
+    if (write_addr < 19200)
+      write_addr <= 0;
+    else
+      write_addr <= write_addr + 1;
   end
 
-  // always @ (posedge clk)
 
   framebuffer_dual_port framebuffer
   (
