@@ -41,13 +41,13 @@ module framebuffer_dual_port_tb
 
     if (h_count < 160)
       h_count <= h_count + 1;
-    else
+    else begin
       h_count <= 0;
-
-    if (v_count < 120)
-      v_count <= v_count + 1;
-    else
-      v_count <= 0;
+      if (v_count < 120)
+        v_count <= v_count + 1;
+      else
+        v_count <= 0;
+    end
 
     if (read_addr < 19200)
       read_addr <= read_addr + 1;
