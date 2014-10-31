@@ -1,3 +1,5 @@
+`timescale 1ns/1ps
+
 module framebuffer_dual_port_tb
 #(
   parameter DATA_WIDTH=1,
