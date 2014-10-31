@@ -20,7 +20,7 @@ module framebuffer_dual_port_tb
     write_clock = 0;
     data = 1;
     read_addr = 0;
-    write_add = 0;
+    write_addr = 0;
     we = 1;
 
     h_count = 0;
