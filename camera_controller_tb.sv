@@ -1,29 +1,28 @@
 /* -----------------------------------------
-  Camera Control Unit
+  Camera Control Unit Tb
 ----------------------------------------- */
-module camera_controller
+module camera_controller_tb
 #(
   parameter ADDR_WIDTH = 15 // Video format: QQVGA = 160x120 => 2^15
 )
-(
+
   // Input
-  input                   reset_n,
-  input                   clk_25,
-  input                   pclk,
-  input             [7:0] data_in,
-  input                   h_ref,
-  input                   v_sync,
+  reg                   reset_n,
+  reg                   clk_25,
+  reg                   pclk,
+  reg             [7:0] data_in,
+  reg                   h_ref,
+  reg                   v_sync,
   // Input and output
-  inout                   sio_d,
-  // Output
-  output                  reset,
-  output                  pwdn,
-  output                  xclk,
-  output                  sio_c,
-  output reg              we, // temp
-  output reg [ADDR_WIDTH-1:0] write_addr, // temp
-  output reg              pixel // temp
-);
+  reg                   sio_d,
+  // Outputs
+  reg                  reset,
+  reg                  pwdn,
+  reg                  xclk,
+  reg                  sio_c,
+  reg              we, // temp
+  reg [ADDR_WIDTH-1:0] write_addr, // temp
+  reg              pixel // temp
 
   /* -----------------------------------------
     Internal wiring
