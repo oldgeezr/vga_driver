@@ -1,7 +1,7 @@
 module filler
 #(
   parameter ADDR_WIDTH = 15 // Video format: QQVGA = 160x120 => 2^15
-)
+);
 (
   // Input
   input                       reset_n,
