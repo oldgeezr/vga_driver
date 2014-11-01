@@ -4,8 +4,8 @@ module filler_tb
 )
 
   // Input
-  reg                    reset_n,
-  reg                    clk_25,
+  reg                    reset_n;
+  reg                    clk_25;
 
   wire [(ADDR_WIDTH-1):0] write_addr;
   wire                    we;
