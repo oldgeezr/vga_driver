@@ -29,7 +29,7 @@ module filler_tb
   filler fill_FB
   (
     .clk_25(clk_25),
-    .reset_n(reset_n)
+    .reset_n(reset_n),
     .we(we),
     .write_addr(write_addr),
     .pixel(pixel)
