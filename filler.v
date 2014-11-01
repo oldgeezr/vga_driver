@@ -20,7 +20,7 @@ module filler
       v_count <= 0;
       write_addr <= 0;
       we <= 1;
-    else begin
+    begin else begin
       pixel <= 1;
 
       if ((h_count > 40 && h_count < 119) && (v_count > 30 && v_count < 89))
