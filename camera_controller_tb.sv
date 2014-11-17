@@ -78,7 +78,7 @@ module camera_controller_tb
     end
   end
 
-  /* Capture valid pixels
+  // Capture valid pixels
   vga_capture ov7670_camera
   (
     .reset_n        (reset_n),
@@ -89,6 +89,6 @@ module camera_controller_tb
     .Y              (Y),
     .write_addr     (write_addr),
     .we             (we)
-  );*/
+  );
 
 endmodule

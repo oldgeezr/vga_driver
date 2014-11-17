@@ -7,55 +7,55 @@ module camera_controller
 )
 (
   // Input
-  input                   reset_n,
-  input                   clk_25,
-  input                   pclk,
-  input             [7:0] data_in,
-  input                   h_ref,
-  input                   v_sync,
+  input                       reset_n,
+  input                       clk_25,
+  input                       pclk,
+  input                 [7:0] data_in,
+  input                       h_ref,
+  input                       v_sync,
   // Input and output
-  inout                   sio_d,
+  inout                       sio_d,
   // Output
-  output                  reset,
-  output                  pwdn,
-  output                  xclk,
-  output                  sio_c,
-  output reg              we, // temp
+  output                      reset,
+  output                      pwdn,
+  output                      xclk,
+  output                      sio_c,
+  output reg                  we, // temp
   output reg [ADDR_WIDTH-1:0] write_addr, // temp
-  output reg              pixel // temp
+  output reg                  pixel // temp
 );
 
-  /* -----------------------------------------
-    Internal wiring
-  ----------------------------------------- */
-  wire [7:0] Y;
+    /* -----------------------------------------
+      Internal wiring
+    ----------------------------------------- */
+    wire [7:0] Y;
 
-  // temp
-  reg [7:0] h_count;
-  reg [6:0] v_count;
+    // temp
+    reg [7:0] h_count;
+    reg [6:0] v_count;
 
-  /* -----------------------------------------
-    Behavioural
-  ----------------------------------------- */
-  // Pass clock signal to camera
-  assign xclk = clk_25; // Maybe try to use clk_50 and set the registers
-  // Pass inverted reset to camera
-  assign reset = ~reset_n; // Should be active high
-  // Turn on camera
-  assign pwdn = 0; // Should be active high
-  // Hold SCCB data line high impedance
-  assign sio_d = 1'bz;
-  // Hold SCCB clock line high
-  assign sio_c = 1;
-  // Comprise 8 bits to 1 bit. Go from 255 colors to 2 colors
-  // assign pixel = (Y[7:6] == 0) ? 0 : 1; // Pixel is either BLACK or WHITE
+    /* -----------------------------------------
+      Behavioural
+    ----------------------------------------- */
+    // Pass clock signal to camera
+    assign xclk = clk_25; // Maybe try to use clk_50 and set the registers
+    // Pass inverted reset to camera
+    assign reset = ~reset_n; // Should be active high
+    // Turn on camera
+    assign pwdn = 0; // Should be active high
+    // Hold SCCB data line high impedance
+    assign sio_d = 1'bz;
+    // Hold SCCB clock line high
+    assign sio_c = 1;
+    // Comprise 8 bits to 1 bit. Go from 255 colors to 2 colors
+    // assign pixel = (Y[7:6] == 0) ? 0 : 1; // Pixel is either BLACK or WHITE
 
-  always @ (posedge clk_25 or negedge reset_n) begin
-    if (~reset_n) begin
-      h_count <= 0;
-      v_count <= 0;
-      write_addr <= 0;
-      we <= 1;
+    always @ (posedge clk_25 or negedge reset_n) begin
+      if (~reset_n) begin
+        h_count <= 0;
+        v_count <= 0;
+        write_addr <= 0;
+        we <= 1;
     end else begin
       pixel <= 1;
 
@@ -79,7 +79,7 @@ module camera_controller
     end
   end
 
-  /* Capture valid pixels
+  // Capture valid pixels
   vga_capture ov7670_camera
   (
     .reset_n        (reset_n),
@@ -90,6 +90,6 @@ module camera_controller
     .Y              (Y),
     .write_addr     (write_addr),
     .we             (we)
-  );*/
+  );
 
 endmodule

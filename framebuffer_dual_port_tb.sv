@@ -12,7 +12,7 @@ module framebuffer_dual_port_tb
   reg                           we;
   reg                           read_clock;
   reg                           write_clock;
-  wire        [(DATA_WIDTH-1):0] q;
+  wire       [(DATA_WIDTH-1):0] q;
 
   reg [7:0] h_count;
   reg [6:0] v_count;

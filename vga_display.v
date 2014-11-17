@@ -21,10 +21,10 @@ module vga_display
     Paramters
   ----------------------------------------- */
   parameter BLACK   = 3'b000;
-  parameter WHITE   = 3'b111;   // 11
+  parameter WHITE   = 3'b111; // 11
   parameter L_BLUE  = 3'b011; // 10
   parameter PURPLE  = 3'b101; // 01
-  parameter BLUE    = 3'b001;   // 00
+  parameter BLUE    = 3'b001; // 00
 
   /* -----------------------------------------
     Behavioural
