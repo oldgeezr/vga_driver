@@ -20,9 +20,9 @@ module camera_controller
   output                      pwdn,
   output                      xclk,
   output                      sio_c,
-  output reg                  we, // temp
-  output reg [ADDR_WIDTH-1:0] write_addr, // temp
-  output reg                  pixel // temp
+  output                      we, // temp
+  output     [ADDR_WIDTH-1:0] write_addr, // temp
+  output                      pixel // temp
 );
 
     /* -----------------------------------------
@@ -54,8 +54,6 @@ module camera_controller
       if (~reset_n) begin
         h_count <= 0;
         v_count <= 0;
-        write_addr <= 0;
-        we <= 1;
     end else begin
       pixel <= 1;
 
@@ -71,11 +69,6 @@ module camera_controller
         else
           v_count <= 0;
       end
-
-      if (write_addr < 19199)
-        write_addr <= write_addr + 1;
-      else
-        write_addr <= 0;
     end
   end
 
