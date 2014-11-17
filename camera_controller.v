@@ -22,7 +22,7 @@ module camera_controller
   output                      sio_c,
   output                      we, // temp
   output     [ADDR_WIDTH-1:0] write_addr, // temp
-  output                      pixel // temp
+  output reg                  pixel // temp
 );
 
     /* -----------------------------------------
