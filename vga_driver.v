@@ -63,7 +63,7 @@ module vga_driver
   // Image Generator
   vga_display image
   (
-    .clk_25       (clk_25)
+    .clk_25       (clk_25),
     .h_count      (h_count),
     .v_count      (v_count),
     .bright       (bright),
